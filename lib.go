@@ -64,6 +64,18 @@ func simpleCmdReturn(name string, args ...string) (*bytes.Buffer, error) {
 	return out, err
 }
 
+func gitCheckout(dir, branch string) error {
+	cur, _ := os.Getwd()
+
+	os.Chdir(dir)
+	err := simpleCmd("git", "checkout", branch)
+	if err != nil {
+		return err
+	}
+	os.Chdir(cur)
+	return nil
+}
+
 func gitPull(remote, branch string) error {
 	return simpleCmd("git", "pull", remote, branch)
 }

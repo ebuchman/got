@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
+	"strings"
 )
 
 func checkArgs(c *cli.Context, n int) cli.Args {
@@ -45,6 +47,29 @@ func cliPull(c *cli.Context) {
 }
 
 func cliCheckout(c *cli.Context) {
+	args := checkArgs(c, 1)
+	branch := args[0]
+	var repos []string
+	if len(args) > 1 {
+		repos = args[1:]
+	}
+
+	dir, _ := os.Getwd()
+
+	if len(repos) == 0 {
+		dirFiles, err := ioutil.ReadDir(dir)
+		ifExit(err)
+		for _, f := range dirFiles {
+			name := f.Name()
+			if strings.HasPrefix(name, ".") {
+				continue
+			}
+			p := path.Join(dir, name)
+			if f.IsDir() {
+				gitCheckout(p, branch)
+			}
+		}
+	}
 }
 
 func ifExit(err error) {
