@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"github.com/codegangsta/cli"
 	"os"
+	"path"
 	"runtime"
 )
 
 var (
 	GoPath = os.Getenv("GOPATH")
+	GoSrc  = path.Join(GoPath, "src")
 )
 
 func main() {

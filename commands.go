@@ -11,6 +11,7 @@ var (
 		Action: cliReplace,
 		Flags: []cli.Flag{
 			pathFlag,
+			depthFlag,
 		},
 	}
 
@@ -37,5 +38,6 @@ var (
 	depthFlag = cli.IntFlag{
 		Name:  "depth, d",
 		Usage: "specify the recursion depth",
+		Value: -1,
 	}
 )
