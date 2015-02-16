@@ -30,7 +30,6 @@ func main() {
 	}
 
 	run(app)
-
 }
 
 // so we can catch panics
@@ -46,3 +45,41 @@ func run(app *cli.App) {
 
 	app.Run(os.Args)
 }
+
+var (
+	replaceCmd = cli.Command{
+		Name:   "replace",
+		Usage:  "String replace on all files in the directory tree",
+		Action: cliReplace,
+		Flags: []cli.Flag{
+			pathFlag,
+			depthFlag,
+		},
+	}
+
+	pullCmd = cli.Command{
+		Name:   "pull",
+		Usage:  "Swap paths, pull changes, swap back",
+		Action: cliPull,
+		Flags:  []cli.Flag{},
+	}
+
+	checkoutCmd = cli.Command{
+		Name:   "checkout",
+		Usage:  "Checkout a git branch across many dirs. Add arguments like <repo>:<branch> to specify excpetions.",
+		Action: cliCheckout,
+		Flags:  []cli.Flag{},
+	}
+
+	pathFlag = cli.StringFlag{
+		Name:  "path, p",
+		Usage: "specify the path to act upon",
+		Value: ".",
+	}
+
+	depthFlag = cli.IntFlag{
+		Name:  "depth, d",
+		Usage: "specify the recursion depth",
+		Value: -1,
+	}
+)

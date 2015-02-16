@@ -18,7 +18,7 @@ func checkArgs(c *cli.Context, n int) cli.Args {
 	return args
 }
 
-// plop the config or genesis defaults into current dir
+// replace a line of text in every file with another
 func cliReplace(c *cli.Context) {
 	args := checkArgs(c, 2)
 	oldS := args[0]
@@ -28,6 +28,7 @@ func cliReplace(c *cli.Context) {
 	exit(replace(dir, oldS, newS, depth))
 }
 
+// replace import paths with host, pull, replace back
 func cliPull(c *cli.Context) {
 	args := checkArgs(c, 2)
 	remote := args[0]
@@ -46,6 +47,7 @@ func cliPull(c *cli.Context) {
 	ifExit(replace(localFullPath, remotePath, localPath, -1))
 }
 
+// checkout a branch across every repository in a directory
 func cliCheckout(c *cli.Context) {
 	args := checkArgs(c, 1)
 	branch := args[0]
