@@ -24,7 +24,7 @@ var (
 
 	checkoutCmd = cli.Command{
 		Name:   "checkout",
-		Usage:  "Checkout a git branch across many dirs",
+		Usage:  "Checkout a git branch across many dirs. Add arguments like <repo>:<branch> to specify excpetions.",
 		Action: cliCheckout,
 		Flags:  []cli.Flag{},
 	}

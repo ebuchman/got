@@ -25,4 +25,11 @@ This does the same thing as running replace, followed by a commit, followed by a
 got checkout develop
 ```
 
-This will `cd` into every directory in the current one and run `git checkout develop`. This is a dangerous command in need of options, I know. Your input is welcome.
+This will `cd` into every directory in the current one and run `git checkout develop`. If you want to specify exceptions, add arguments of the form `<repo>:<branch>`, ie
+
+
+```
+got checkout develop myrepo:newfeature repo2:master
+```
+
+will cd into every repo and run `git checkout develop` except in `myrepo` it will do `git checkout newfeature` and in `repo2` will do `git checkout master`.

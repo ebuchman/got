@@ -54,18 +54,31 @@ func cliCheckout(c *cli.Context) {
 		repos = args[1:]
 	}
 
+	repoMap := make(map[string]string)
+	for _, r := range repos {
+		sp := strings.Split(r, ":")
+		if len(sp) != 2 {
+			ifExit(fmt.Errorf("Additional arguments must be of the form <repo>:<branch>"))
+		}
+		repo := sp[0]
+		branch := sp[1]
+		repoMap[repo] = branch
+	}
+
 	dir, _ := os.Getwd()
 
-	if len(repos) == 0 {
-		dirFiles, err := ioutil.ReadDir(dir)
-		ifExit(err)
-		for _, f := range dirFiles {
-			name := f.Name()
-			if strings.HasPrefix(name, ".") {
-				continue
-			}
-			p := path.Join(dir, name)
-			if f.IsDir() {
+	dirFiles, err := ioutil.ReadDir(dir)
+	ifExit(err)
+	for _, f := range dirFiles {
+		name := f.Name()
+		if strings.HasPrefix(name, ".") {
+			continue
+		}
+		p := path.Join(dir, name)
+		if f.IsDir() {
+			if b, ok := repoMap[name]; ok {
+				gitCheckout(p, b)
+			} else {
 				gitCheckout(p, branch)
 			}
 		}
