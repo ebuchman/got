@@ -66,7 +66,7 @@ var (
 
 	checkoutCmd = cli.Command{
 		Name:   "checkout",
-		Usage:  "Checkout a git branch across many dirs. Add arguments like <repo>:<branch> to specify excpetions.",
+		Usage:  "Checkout a git branch across all repos in the current dir. Add arguments like <repo>:<branch> to specify excpetions and <repo> to specify which repos to run checkout in, if not all.",
 		Action: cliCheckout,
 		Flags:  []cli.Flag{},
 	}

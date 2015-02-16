@@ -32,4 +32,10 @@ This will `cd` into every directory in the current one and run `git checkout dev
 got checkout develop myrepo:newfeature repo2:master
 ```
 
-will cd into every repo and run `git checkout develop` except in `myrepo` it will do `git checkout newfeature` and in `repo2` will do `git checkout master`.
+will `cd` into every repo and run `git checkout develop` except in `myrepo` it will do `git checkout newfeature` and in `repo2` will do `git checkout master`. To only `cd` into some directories, just list them, ie. 
+
+```
+got checkout develop myrepo anotherepo repo2:master
+```
+
+will checkout `myrepo` and `anotherepo` onto develop and `repo2` onto master while leaving all others alone.

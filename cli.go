@@ -56,19 +56,42 @@ func cliCheckout(c *cli.Context) {
 		repos = args[1:]
 	}
 
+	var nonColon bool
 	repoMap := make(map[string]string)
 	for _, r := range repos {
 		sp := strings.Split(r, ":")
-		if len(sp) != 2 {
-			ifExit(fmt.Errorf("Additional arguments must be of the form <repo>:<branch>"))
-		}
 		repo := sp[0]
-		branch := sp[1]
-		repoMap[repo] = branch
+		var b string
+		if len(sp) != 2 {
+			nonColon = true
+			b = branch
+			//ifExit(fmt.Errorf("Additional arguments must be of the form <repo>:<branch>"))
+		} else {
+			b = sp[1]
+		}
+		repoMap[repo] = b
 	}
 
 	dir, _ := os.Getwd()
 
+	// if nonColon, we only loop through dirs in the repoMap
+	if nonColon {
+		for r, b := range repoMap {
+			p := path.Join(dir, r)
+			f, err := os.Stat(p)
+			if err != nil {
+				log.Println("Unknown repo:", r)
+				continue
+			}
+			if !f.IsDir() {
+				log.Println(r, " is not a directory")
+			}
+			gitCheckout(p, b)
+		}
+		exit(nil)
+	}
+
+	// otherwise, we loop through all dirs in the current one
 	dirFiles, err := ioutil.ReadDir(dir)
 	ifExit(err)
 	for _, f := range dirFiles {
