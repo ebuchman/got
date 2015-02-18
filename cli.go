@@ -47,6 +47,34 @@ func cliPull(c *cli.Context) {
 	ifExit(replace(localFullPath, remotePath, localPath, -1))
 }
 
+func cliBranch(c *cli.Context) {
+	var dir string
+	if len(c.Args()) == 1 {
+		dir = c.Args().First()
+	} else {
+		dir, _ = os.Getwd()
+	}
+
+	dirFiles, err := ioutil.ReadDir(dir)
+	ifExit(err)
+	for _, f := range dirFiles {
+		name := f.Name()
+		if strings.HasPrefix(name, ".") {
+			continue
+		}
+		p := path.Join(dir, name)
+		if f.IsDir() {
+			branch, err := gitGetBranch(p)
+			if err == NotGitRepoErr {
+				continue
+			}
+			ifExit(err)
+			fmt.Printf("%s : %s\n", name, branch)
+		}
+	}
+
+}
+
 // checkout a branch across every repository in a directory
 func cliCheckout(c *cli.Context) {
 	args := checkArgs(c, 1)

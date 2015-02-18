@@ -27,6 +27,7 @@ func main() {
 		replaceCmd,
 		pullCmd,
 		checkoutCmd,
+		branchCmd,
 	}
 
 	run(app)
@@ -61,6 +62,13 @@ var (
 		Name:   "pull",
 		Usage:  "Swap paths, pull changes, swap back",
 		Action: cliPull,
+		Flags:  []cli.Flag{},
+	}
+
+	branchCmd = cli.Command{
+		Name:   "branch",
+		Usage:  "List the branch every directory is on",
+		Action: cliBranch,
 		Flags:  []cli.Flag{},
 	}
 

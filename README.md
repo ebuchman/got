@@ -39,3 +39,9 @@ got checkout develop myrepo anotherepo repo2:master
 ```
 
 will checkout `myrepo` and `anotherepo` onto develop and `repo2` onto master while leaving all others alone.
+
+### See which branch every repo in a directory is on 
+
+```
+got branch
+```

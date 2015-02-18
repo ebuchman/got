@@ -76,6 +76,25 @@ func gitCheckout(dir, branch string) error {
 	return nil
 }
 
+var NotGitRepoErr = fmt.Errorf("Not a git repo")
+
+func gitGetBranch(dir string) (string, error) {
+	if _, err := os.Stat(path.Join(dir, ".git")); err != nil {
+		return "", NotGitRepoErr
+	}
+	p := path.Join(dir, ".git", "HEAD")
+	b, err := ioutil.ReadFile(p)
+	if err != nil {
+		return "", err
+	}
+
+	s := strings.TrimSpace(string(b))
+	sp := strings.Split(s, " ")
+	s = sp[len(sp)-1]
+	branch := path.Base(s)
+	return branch, nil
+}
+
 func gitPull(remote, branch string) error {
 	return simpleCmd("git", "pull", remote, branch)
 }
