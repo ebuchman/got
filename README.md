@@ -45,3 +45,15 @@ will checkout `myrepo` and `anotherepo` onto develop and `repo2` onto master whi
 ```
 got branch
 ```
+
+### Toggle the import path in a go directory between the Godep/ vendored packages and the $GOPATH based location
+
+```
+got dep --local github.com/myorg/myrepo
+```
+
+and 
+
+```
+got dep --vendor github.com/myorg/myrepo
+```

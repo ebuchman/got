@@ -28,6 +28,7 @@ func main() {
 		pullCmd,
 		checkoutCmd,
 		branchCmd,
+		depCmd,
 	}
 
 	run(app)
@@ -79,6 +80,18 @@ var (
 		Flags:  []cli.Flag{},
 	}
 
+	depCmd = cli.Command{
+		Name:   "dep",
+		Usage:  "Toggle the import statement for a godep managed dependency",
+		Action: cliGodep,
+		Flags: []cli.Flag{
+			localPathFlag,
+			vendorPathFlag,
+			depthFlag,
+			pathFlag,
+		},
+	}
+
 	pathFlag = cli.StringFlag{
 		Name:  "path, p",
 		Usage: "specify the path to act upon",
@@ -89,5 +102,15 @@ var (
 		Name:  "depth, d",
 		Usage: "specify the recursion depth",
 		Value: -1,
+	}
+
+	localPathFlag = cli.BoolFlag{
+		Name:  "local",
+		Usage: "set the import path to the proper $GOPATH location",
+	}
+
+	vendorPathFlag = cli.BoolFlag{
+		Name:  "vendor",
+		Usage: "set the import path to the vendored location (a mirror of $GOPATH within the current repo)",
 	}
 )

@@ -75,6 +75,54 @@ func cliBranch(c *cli.Context) {
 
 }
 
+// update the go-import paths in a directory
+func cliGodep(c *cli.Context) {
+	args := checkArgs(c, 1)
+	repo := args[0]
+
+	depth := c.Int("depth")
+	dir := c.String("path")
+	oldS, newS := "", ""
+	current, _ := os.Getwd()
+
+	if !strings.HasPrefix(current, GoSrc) {
+		ifExit(fmt.Errorf("Directory is not on the $GOPATH"))
+	}
+
+	remains := current[len(GoSrc)+1:] // consume the slash too
+	spl := strings.Split(remains, "/")
+	if len(spl) < 3 {
+		ifExit(fmt.Errorf("Invalid positioned repo on the $GOPATH"))
+	}
+	currentRepo := strings.Join(spl[:3], "/")
+
+	if c.Bool("local") {
+		oldS = path.Join(currentRepo, "Godeps", "_workspace", "src", repo)
+		newS = repo
+	} else if c.Bool("vendor") {
+		oldS = repo
+		newS = path.Join(currentRepo, "Godeps", "_workspace", "src", repo)
+	} else {
+		exit(fmt.Errorf("Specify the --local or --vendor flag to toggle the import statement"))
+	}
+
+	// now run the replace
+	// but avoid the Godeps/ dir
+	fs, err := ioutil.ReadDir(dir)
+	if err != nil {
+		exit(err)
+	}
+	for _, f := range fs {
+		if !f.IsDir() {
+			continue
+		}
+		if f.Name() != "Godeps" {
+			ifExit(replace(f.Name(), oldS, newS, depth-1))
+		}
+	}
+	exit(replace(dir, oldS, newS, 1)) // replace in any files in the root
+}
+
 // checkout a branch across every repository in a directory
 func cliCheckout(c *cli.Context) {
 	args := checkArgs(c, 1)
