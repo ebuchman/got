@@ -38,7 +38,7 @@ func replace(dir, oldS, newS string, depth int) error {
 			if err := replace(p, oldS, newS, depth-1); err != nil {
 				return err
 			}
-		} else if strings.HasSuffix(name, ".go") {
+		} else if strings.HasSuffix(name, ".go") || strings.HasSuffix(name, ".md") {
 			replaceStringInFile(f, dir, oldS, newS)
 		}
 	}
